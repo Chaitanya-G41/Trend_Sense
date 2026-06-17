@@ -1,0 +1,39 @@
+# TrendSense: Social Media Trend Prediction for Business Decision Making
+# Core Dependencies
+
+# Data handling
+pandas>=2.0.0
+numpy>=1.24.0
+openpyxl>=3.1.0
+
+# ML Models
+scikit-learn>=1.3.0
+xgboost>=2.0.0
+statsmodels>=0.14.0
+
+# Google Trends
+pytrends>=4.9.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# Dashboard
+streamlit>=1.28.0
+
+# Model persistence
+joblib>=1.3.0
+
+# Utilities
+tqdm>=4.65.0
+
+# Kaggle API
+kaggle>=1.5.0
+
+# SHAP for model interpretability
+shap>=0.42.0
+
+# Jupyter
+jupyter>=1.0.0
+ipykernel>=6.25.0
