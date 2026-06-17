@@ -35,9 +35,9 @@ Retail businesses rely solely on historical sales data for demand forecasting, m
 │   Data   │   TVI    │ Feature  │    ML    │  Decision   │
 │ Ingestion│Computation│Engineering│ Models  │   Engine    │
 │          │          │          │          │             │
-│ Walmart  │ Rate of  │ Temporal │ ARIMA    │ HOLD /      │
-│ Rossmann │ Change   │ Holiday  │ Random   │ INCREASE /  │
-│ G.Trends │ Spike    │ Lag/Roll │ Forest   │ URGENT      │
+│ Walmart  │ Rate of  │ Temporal │ Naive    │ HOLD /      │
+│ Google   │ Change   │ Holiday  │ Random   │ INCREASE /  │
+│ Trends   │ Spike    │ Lag/Roll │ Forest   │ URGENT      │
 │          │ Detection│ TVI Merge│ XGBoost  │ RESTOCK     │
 └──────────┴──────────┴──────────┴──────────┴─────────────┘
                            │
@@ -67,8 +67,8 @@ TVI(t) = [Trend(t) - Trend(t-1)] / Trend(t-1) × 100
 
 ## 📂 Project Structure
 
-```
-AIFE/
+```text
+Trend_Sense/
 ├── config.py                    # Global configuration
 ├── requirements.txt             # Python dependencies
 ├── run_pipeline.py              # End-to-end pipeline runner
@@ -114,7 +114,6 @@ AIFE/
 ### 1. Install Dependencies
 
 ```bash
-cd AIFE
 pip install -r requirements.txt
 ```
 
@@ -126,14 +125,8 @@ pip install -r requirements.txt
 ### 3. Run the Pipeline
 
 ```bash
-# Full pipeline (downloads data + trains models)
+# Full pipeline (processes data + trains models natively)
 python run_pipeline.py
-
-# Quick test with synthetic data (no downloads needed)
-python run_pipeline.py --mode test
-
-# Use synthetic Google Trends (if rate-limited)
-python run_pipeline.py --synthetic-trends
 ```
 
 ### 4. Launch Dashboard
@@ -145,8 +138,8 @@ streamlit run dashboard/app.py
 The dashboard opens at `http://localhost:8501` with 4 pages:
 - **Overview** — KPI cards, sales trends, store performance
 - **Trend Analysis** — TVI visualization, spike detection
-- **Predictions** — Model comparison (ARIMA vs RF vs XGBoost)
-- **Decision Support** — Interactive HOLD/INCREASE/URGENT simulator
+- **Predictions** — Model comparison (Naive vs RF vs XGBoost)
+- **Decision Support** — Live, category-specific store dashboard with organic TVI injection
 
 ---
 
@@ -155,7 +148,7 @@ The dashboard opens at `http://localhost:8501` with 4 pages:
 | Dataset | Source | Rows | Use |
 |---|---|---|---|
 | Walmart Store Sales | [Kaggle](https://www.kaggle.com/datasets/yasserh/walmart-dataset) | ~6,400 | Primary sales baseline |
-| Rossmann Store Sales | [Kaggle](https://www.kaggle.com/datasets/pratyushakar/rossmann-store-sales) | ~1M | Generalisation testing |
+| Rossmann Store Sales | [Kaggle](https://www.kaggle.com/datasets/pratyushakar/rossmann-store-sales) | ~1M | *Planned for V2 Generalisation* |
 | Google Trends India | [trends.google.com](https://trends.google.com) | Weekly | TVI computation |
 
 ---
@@ -164,11 +157,11 @@ The dashboard opens at `http://localhost:8501` with 4 pages:
 
 | Model | Role | Expected MAPE |
 |---|---|---|
-| ARIMA | Baseline (no TVI) | ~15–20% |
+| Naive Baseline (Lag 1W) | Baseline (no TVI) | ~15–20% |
 | Random Forest | Intermediate | ~10–14% |
 | **XGBoost + TVI** | **Primary** | **<12%** |
 
-**Δ-MAPE**: XGBoost+TVI achieves measurable improvement over ARIMA baseline.
+**Δ-MAPE**: XGBoost+TVI achieves measurable improvement over the baseline.
 
 ---
 
