@@ -540,24 +540,23 @@ def run_full_training(
 
     results = {}
 
-    # 2. ARIMA Baseline
-    # Convert index to DatetimeIndex for ARIMA
-    temp_df = df.sort_values(date_col).set_index(date_col)
-    temp_df.index = pd.to_datetime(temp_df.index)
-    
-    train_series = temp_df[target_col].iloc[: len(X_train)]
-    test_series = temp_df[target_col].iloc[len(X_train) :]
-    
-    # Try to set frequency if possible
-    try:
-        train_series = train_series.asfreq(pd.infer_freq(train_series.index) or 'W-SUN')
-        test_series = test_series.asfreq(pd.infer_freq(test_series.index) or 'W-SUN')
-    except:
-        pass
+    # 2. Naive Baseline (predicting lag_1w)
+    # Using ARIMA on multi-store panel data without separating by store causes statsmodels to hang.
+    print(f"📈 Evaluating Naive Baseline (Lag 1W)...")
+    if "lag_1w" in X_test.columns:
+        naive_preds = X_test["lag_1w"].values
+    else:
+        naive_preds = np.full(len(y_test), y_train.mean())
         
-    if len(test_series) > 0:
-        arima_result = train_arima_baseline(train_series, test_series)
-        results["ARIMA (Baseline)"] = arima_result
+    metrics = compute_metrics(y_test.values, naive_preds)
+    print(f"   MAPE: {metrics['MAPE (%)']}%  |  RMSE: {metrics['RMSE']}  |  R²: {metrics['R²']}")
+    
+    results["Naive Baseline"] = {
+        "model_name": "Naive Baseline",
+        "model": None,
+        "predictions": naive_preds,
+        "metrics": metrics
+    }
 
     # 3. Random Forest
     rf_result = train_random_forest(X_train, y_train, X_test, y_test)
