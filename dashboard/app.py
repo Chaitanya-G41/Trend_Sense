@@ -161,6 +161,8 @@ st.markdown("""
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
+    [data-testid="stHeader"] {display: none;}
     
     /* Custom separator */
     .custom-divider {
@@ -186,42 +188,26 @@ with st.sidebar:
     st.markdown("### Navigation")
     page = st.radio(
         "Go to",
-        ["🏠 Overview", "📊 Trend Analysis", "🤖 Predictions", "🎯 Decision Support"],
+        ["Overview", "Trend Analysis", "Predictions", "Decision Support"],
         label_visibility="collapsed",
     )
-    
-    st.markdown("---")
-    st.markdown("### Settings")
-    category = st.selectbox(
-        "Product Category",
-        list(config.DEFAULT_CATEGORY_LAGS.keys()),
-        index=0,
-    )
-    
-    st.markdown("---")
-    st.markdown("""
-    <div style="text-align: center; color: #64748B; font-size: 0.75rem; padding: 10px 0;">
-        <p>TrendSense v1.0</p>
-        <p>CI124TA — AI Foundations for Engineers</p>
-        <p>© 2025 Nemitha, Chaitanya, Inika</p>
-    </div>
-    """, unsafe_allow_html=True)
 
 # ──────────────────────────────────
 # Page Router
 # ──────────────────────────────────
-# Store selected category in session state
-st.session_state["selected_category"] = category
+# Default selected category to General since we removed the sidebar dropdown
+st.session_state["selected_category"] = "General"
 
-if page == "🏠 Overview":
+if page == "Overview":
     from pages import page_01_overview
     page_01_overview.render()
-elif page == "📊 Trend Analysis":
+elif page == "Trend Analysis":
     from pages import page_02_trend_analysis
     page_02_trend_analysis.render()
-elif page == "🤖 Predictions":
+elif page == "Predictions":
     from pages import page_03_predictions
     page_03_predictions.render()
-elif page == "🎯 Decision Support":
+elif page == "Decision Support":
     from pages import page_04_decision_support
     page_04_decision_support.render()
+

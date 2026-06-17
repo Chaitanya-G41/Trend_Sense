@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Data and models (can be generated locally via setup_and_run.py)
+# data/raw/
+# data/processed/
+# data/trends/
+# models/
+# reports/figures/
+
+# Streamlit config/secrets
+.streamlit/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
