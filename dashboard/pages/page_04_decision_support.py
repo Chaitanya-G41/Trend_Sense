@@ -25,7 +25,7 @@ def render():
     
     st.markdown("""
     <div class="main-header">
-        <h1>🎯 Decision Support System</h1>
+        <h1> Decision Support System</h1>
         <p>AI-powered inventory recommendations — HOLD / INCREASE STOCK / URGENT RESTOCK</p>
     </div>
     """, unsafe_allow_html=True)
@@ -35,26 +35,26 @@ def render():
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
     # ─── Interactive Decision Simulator ───
-    st.subheader("⚙️ Decision Simulator")
+    st.subheader("⚙ Decision Simulator")
     st.markdown("*Adjust parameters to see how the decision engine responds in real-time*")
     
     sim_col1, sim_col2, sim_col3 = st.columns(3)
     
     with sim_col1:
         current_stock = st.number_input(
-            "📦 Current Stock (units)",
+            " Current Stock (units)",
             min_value=100, max_value=100000, value=10000, step=500,
             help="Current inventory level in units"
         )
         predicted_demand = st.number_input(
-            "📈 Predicted Demand (units)",
+            " Predicted Demand (units)",
             min_value=100, max_value=100000, value=12000, step=500,
             help="ML model's predicted weekly demand"
         )
     
     with sim_col2:
         model_confidence = st.slider(
-            "🎯 Model Confidence",
+            " Model Confidence",
             min_value=0.5, max_value=0.99, value=0.85, step=0.01,
             help="Confidence score from the ML model"
         )
@@ -66,7 +66,7 @@ def render():
         )
     
     with sim_col3:
-        tvi_spike = st.checkbox("⚡ TVI Spike Active", value=False)
+        tvi_spike = st.checkbox(" TVI Spike Active", value=False)
         if tvi_spike:
             tvi_severity = st.selectbox("Spike Severity", ["MILD", "MODERATE", "SEVERE"], index=1)
             tvi_value = st.slider("TVI Value", -50.0, 100.0, 45.0)
@@ -138,12 +138,12 @@ def render():
         st.markdown(f"**{decision['rationale']}**")
         
         if decision["spike_boost_applied"]:
-            st.warning(f"⚡ Urgency was boosted by a **{tvi_severity}** TVI spike (TVI = {tvi_value:.1f})")
+            st.warning(f" Urgency was boosted by a **{tvi_severity}** TVI spike (TVI = {tvi_value:.1f})")
     
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
     # ─── Decision Threshold Visualization ───
-    st.subheader("📊 Decision Thresholds")
+    st.subheader(" Decision Thresholds")
     
     col_gauge, col_explain = st.columns([2, 1])
     
@@ -195,7 +195,7 @@ def render():
         🔴 **URGENT RESTOCK** — Change ≥ 40%  
         Significant surge detected. Immediate restocking needed.
         
-        ⚡ **TVI Spike Boost**  
+         **TVI Spike Boost**  
         When a MODERATE or SEVERE TVI spike is detected, urgency is boosted by one level.
         """)
     
@@ -238,7 +238,7 @@ def render():
     with sum_c3:
         st.metric("🔴 URGENT", f"{summary['urgent_count']} ({summary['urgent_pct']}%)")
     with sum_c4:
-        st.metric("📊 Avg Confidence", f"{summary['avg_confidence']}%")
+        st.metric(" Avg Confidence", f"{summary['avg_confidence']}%")
     
     # Batch results table
     display_df = batch_df[["category", "action", "confidence_pct", "predicted_demand",
@@ -258,7 +258,7 @@ def render():
     col_donut, col_lag = st.columns(2)
     
     with col_donut:
-        st.subheader("📊 Decision Distribution")
+        st.subheader(" Decision Distribution")
         
         labels = ["HOLD", "INCREASE STOCK", "URGENT RESTOCK"]
         values = [summary["hold_count"], summary["increase_count"], summary["urgent_count"]]
@@ -284,7 +284,7 @@ def render():
         st.plotly_chart(fig_donut, use_container_width=True)
     
     with col_lag:
-        st.subheader("⏱️ Category Lag Periods")
+        st.subheader("⏱ Category Lag Periods")
         st.markdown("*Optimal delay between social signal and purchase event*")
         
         lag_data = config.DEFAULT_CATEGORY_LAGS
@@ -319,7 +319,7 @@ def render():
     
     # ─── Confidence Distribution ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader("🎯 Confidence Score Analysis")
+    st.subheader(" Confidence Score Analysis")
     
     fig_conf = go.Figure()
     

@@ -22,7 +22,7 @@ def render():
     
     st.markdown("""
     <div class="main-header">
-        <h1>📊 Trend Analysis</h1>
+        <h1> Trend Analysis</h1>
         <p>Google Trends interest, Trend Velocity Index (TVI), and spike detection</p>
     </div>
     """, unsafe_allow_html=True)
@@ -31,7 +31,7 @@ def render():
     trends_df = load_trends_data()
     
     if trends_df is None:
-        st.warning("⚠️ No trends data found. Run the pipeline first:")
+        st.warning(" No trends data found. Run the pipeline first:")
         st.code("python run_pipeline.py --synthetic-trends", language="bash")
         return
     
@@ -43,7 +43,7 @@ def render():
         return
     
     selected_keyword = st.selectbox(
-        "🔍 Select Trend Keyword",
+        " Select Trend Keyword",
         keywords,
         index=0,
     )
@@ -58,20 +58,20 @@ def render():
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
-        st.metric("📈 Mean TVI", f"{summary['mean_tvi']:.1f}%")
+        st.metric(" Mean TVI", f"{summary['mean_tvi']:.1f}%")
     with col2:
-        st.metric("📊 Std TVI", f"{summary['std_tvi']:.1f}%")
+        st.metric(" Std TVI", f"{summary['std_tvi']:.1f}%")
     with col3:
         st.metric("🔥 Total Spikes", summary['total_spikes'])
     with col4:
         st.metric("🔴 Severe Spikes", summary['severe_spikes'])
     with col5:
-        st.metric("📉 Spike Rate", f"{summary['spike_rate_pct']}%")
+        st.metric(" Spike Rate", f"{summary['spike_rate_pct']}%")
     
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
     # ─── Main Visualization: 3-panel chart ───
-    st.subheader(f"📈 Trend Analysis — '{selected_keyword}'")
+    st.subheader(f" Trend Analysis — '{selected_keyword}'")
     
     fig = make_subplots(
         rows=3, cols=1,
@@ -206,7 +206,7 @@ def render():
     # ─── Multi-keyword Comparison ───
     if len(keywords) > 1:
         st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        st.subheader("📊 Multi-Keyword Comparison")
+        st.subheader(" Multi-Keyword Comparison")
         
         compare_keywords = st.multiselect(
             "Select keywords to compare",
