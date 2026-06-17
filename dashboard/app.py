@@ -33,42 +33,76 @@ st.set_page_config(
 st.markdown("""
 <style>
     /* Import Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
     
     /* Global styles */
     .stApp {
-        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+        font-family: 'Outfit', sans-serif;
+        color: #1E293B;
     }
     
-    /* Dark theme override */
+    /* Sidebar background */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+        background: #FFFFFF !important;
+        border-right: 1px solid #E2E8F0;
     }
     
-    [data-testid="stSidebar"] .stMarkdown {
-        color: #F8FAFC;
+    [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] p, [data-testid="stSidebar"] h3 {
+        color: #334155 !important;
+    }
+    
+    /* Style radio navigation items */
+    .stRadio div[role="radiogroup"] {
+        gap: 8px;
+    }
+    
+    .stRadio div[role="radiogroup"] > label {
+        background: #F8FAFC;
+        color: #475569;
+        border-radius: 12px;
+        padding: 10px 16px;
+        margin-bottom: 6px;
+        border: 1px solid #E2E8F0;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    
+    .stRadio div[role="radiogroup"] > label:hover {
+        background: #F1F5F9;
+        border-color: #CBD5E1;
+        transform: translateX(3px);
+    }
+    
+    .stRadio div[role="radiogroup"] > label[data-checked="true"] {
+        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%) !important;
+        border-color: #6366F1 !important;
+        color: #4F46E5 !important;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
+        font-weight: 600;
     }
     
     /* KPI Card styling */
     .kpi-card {
-        background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
-        border: 1px solid rgba(99, 102, 241, 0.3);
-        border-radius: 16px;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 18px;
         padding: 24px;
         text-align: center;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
         transition: transform 0.2s, box-shadow 0.2s;
     }
     
     .kpi-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(99, 102, 241, 0.2);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
     }
     
     .kpi-value {
         font-size: 2.2rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #6366F1, #8B5CF6);
+        background: linear-gradient(135deg, #4F46E5, #EC4899);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 8px 0;
@@ -76,7 +110,7 @@ st.markdown("""
     
     .kpi-label {
         font-size: 0.85rem;
-        color: #94A3B8;
+        color: #64748B;
         text-transform: uppercase;
         letter-spacing: 1px;
         font-weight: 600;
@@ -84,46 +118,47 @@ st.markdown("""
     
     /* Decision cards */
     .decision-hold {
-        background: linear-gradient(135deg, #064E3B, #065F46);
-        border: 2px solid #10B981;
-        border-radius: 16px;
-        padding: 20px;
-        color: #F8FAFC;
+        background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+        border: 1px solid #10B981;
+        border-radius: 18px;
+        padding: 24px;
+        color: #065F46;
     }
     
     .decision-increase {
-        background: linear-gradient(135deg, #78350F, #92400E);
-        border: 2px solid #F59E0B;
-        border-radius: 16px;
-        padding: 20px;
-        color: #F8FAFC;
+        background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+        border: 1px solid #F59E0B;
+        border-radius: 18px;
+        padding: 24px;
+        color: #78350F;
     }
     
     .decision-urgent {
-        background: linear-gradient(135deg, #7F1D1D, #991B1B);
-        border: 2px solid #EF4444;
-        border-radius: 16px;
-        padding: 20px;
-        color: #F8FAFC;
+        background: linear-gradient(135deg, #FEF2F2, #FEE2E2);
+        border: 1px solid #EF4444;
+        border-radius: 18px;
+        padding: 24px;
+        color: #991B1B;
         animation: pulse 2s infinite;
     }
     
     @keyframes pulse {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-        50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
+        50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
     }
     
     /* Header styling */
     .main-header {
-        background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%);
+        background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 50%, #FDF2F8 100%);
         border-radius: 20px;
         padding: 32px;
         margin-bottom: 24px;
-        border: 1px solid rgba(99, 102, 241, 0.2);
+        border: 1px solid #E0E7FF;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
     }
     
     .main-header h1 {
-        background: linear-gradient(135deg, #818CF8, #C084FC);
+        background: linear-gradient(135deg, #4F46E5, #9333EA);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 2.5rem;
@@ -132,7 +167,7 @@ st.markdown("""
     }
     
     .main-header p {
-        color: #CBD5E1;
+        color: #475569;
         font-size: 1.1rem;
         margin-top: 8px;
     }
@@ -140,22 +175,17 @@ st.markdown("""
     /* Sidebar logo area */
     .sidebar-brand {
         text-align: center;
-        padding: 20px 0 30px 0;
-        border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        padding: 20px 0;
+        border-bottom: 1px solid #F1F5F9;
         margin-bottom: 20px;
     }
     
     .sidebar-brand h2 {
-        background: linear-gradient(135deg, #818CF8, #C084FC);
+        background: linear-gradient(135deg, #4F46E5, #EC4899);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         font-weight: 800;
-    }
-    
-    /* Metric delta */
-    [data-testid="stMetricDelta"] {
-        font-weight: 600;
     }
     
     /* Hide Streamlit branding */
@@ -167,7 +197,7 @@ st.markdown("""
     /* Custom separator */
     .custom-divider {
         height: 2px;
-        background: linear-gradient(90deg, transparent, #6366F1, transparent);
+        background: linear-gradient(90deg, transparent, #E2E8F0, transparent);
         margin: 24px 0;
         border: none;
     }

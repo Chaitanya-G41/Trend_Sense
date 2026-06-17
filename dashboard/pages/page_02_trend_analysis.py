@@ -161,8 +161,8 @@ def render():
                       annotation_text=label, row=3, col=1)
     
     fig.update_layout(
-        template="plotly_dark",
-        plot_bgcolor="rgba(15, 23, 42, 0.8)",
+        template="plotly_white",
+        plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
         height=900,
         margin=dict(l=20, r=20, t=40, b=20),
@@ -171,8 +171,8 @@ def render():
     )
     
     for i in range(1, 4):
-        fig.update_xaxes(gridcolor="rgba(148,163,184,0.1)", row=i, col=1)
-        fig.update_yaxes(gridcolor="rgba(148,163,184,0.1)", row=i, col=1)
+        fig.update_xaxes(gridcolor="rgba(0,0,0,0.05)", row=i, col=1)
+        fig.update_yaxes(gridcolor="rgba(0,0,0,0.05)", row=i, col=1)
     
     st.plotly_chart(fig, use_container_width=True)
     
@@ -231,13 +231,13 @@ def render():
                 ))
             
             fig_compare.update_layout(
-                template="plotly_dark",
-                plot_bgcolor="rgba(15, 23, 42, 0.8)",
+                template="plotly_white",
+                plot_bgcolor="rgba(0,0,0,0)",
                 paper_bgcolor="rgba(0,0,0,0)",
                 height=400,
                 title="Search Interest Comparison",
-                xaxis=dict(gridcolor="rgba(148,163,184,0.1)"),
-                yaxis=dict(title="Interest (0-100)", gridcolor="rgba(148,163,184,0.1)"),
+                xaxis=dict(gridcolor="rgba(0,0,0,0.05)"),
+                yaxis=dict(title="Interest (0-100)", gridcolor="rgba(0,0,0,0.05)"),
                 legend=dict(orientation="h", yanchor="bottom", y=1.02),
             )
             

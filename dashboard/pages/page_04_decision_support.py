@@ -152,21 +152,21 @@ def render():
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number+delta",
             value=change_pct,
-            title={"text": f"Predicted Demand Change", "font": {"size": 16, "color": "#F8FAFC"}},
-            number={"suffix": "%", "font": {"color": "#F8FAFC"}},
+            title={"text": f"Predicted Demand Change", "font": {"size": 16, "color": "#1E293B"}},
+            number={"suffix": "%", "font": {"color": "#1E293B"}},
             delta={"reference": 0, "increasing": {"color": "#EF4444"}, "decreasing": {"color": "#10B981"}},
             gauge={
-                "axis": {"range": [-20, 80], "tickcolor": "#94A3B8"},
+                "axis": {"range": [-20, 80], "tickcolor": "#475569"},
                 "bar": {"color": accent_color},
-                "bgcolor": "#1E293B",
-                "bordercolor": "#334155",
+                "bgcolor": "#F1F5F9",
+                "bordercolor": "#E2E8F0",
                 "steps": [
-                    {"range": [-20, 10], "color": "rgba(16, 185, 129, 0.2)"},
-                    {"range": [10, 40], "color": "rgba(245, 158, 11, 0.2)"},
-                    {"range": [40, 80], "color": "rgba(239, 68, 68, 0.2)"},
+                    {"range": [-20, 10], "color": "rgba(16, 185, 129, 0.15)"},
+                    {"range": [10, 40], "color": "rgba(245, 158, 11, 0.15)"},
+                    {"range": [40, 80], "color": "rgba(239, 68, 68, 0.15)"},
                 ],
                 "threshold": {
-                    "line": {"color": "#F8FAFC", "width": 3},
+                    "line": {"color": "#1E293B", "width": 3},
                     "thickness": 0.8,
                     "value": change_pct,
                 },
@@ -175,7 +175,7 @@ def render():
         
         fig_gauge.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
-            font={"color": "#F8FAFC"},
+            font={"color": "#1E293B"},
             height=300,
             margin=dict(l=30, r=30, t=60, b=20),
         )
@@ -267,15 +267,15 @@ def render():
         fig_donut = go.Figure(data=[go.Pie(
             labels=labels, values=values,
             hole=0.55,
-            marker=dict(colors=colors_pie, line=dict(color="#0F172A", width=3)),
+            marker=dict(colors=colors_pie, line=dict(color="#FFFFFF", width=3)),
             textinfo="label+percent",
-            textfont=dict(size=13, color="#F8FAFC"),
+            textfont=dict(size=13, color="#1E293B"),
         )])
         
         fig_donut.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#F8FAFC"),
+            font=dict(color="#1E293B"),
             height=350,
             showlegend=False,
             margin=dict(l=20, r=20, t=20, b=20),
@@ -299,19 +299,19 @@ def render():
             x=categories_list,
             y=lags_list,
             marker=dict(color=colors_lag[:len(categories_list)],
-                       line=dict(color="#F8FAFC", width=1)),
+                       line=dict(color="#FFFFFF", width=1)),
             text=[f"{l}d" for l in lags_list],
             textposition="outside",
-            textfont=dict(color="#F8FAFC", size=14, family="Inter"),
+            textfont=dict(color="#1E293B", size=14, family="Outfit"),
         ))
         
         fig_lag.update_layout(
-            template="plotly_dark",
-            plot_bgcolor="rgba(15, 23, 42, 0.8)",
+            template="plotly_white",
+            plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=350,
-            xaxis=dict(gridcolor="rgba(148,163,184,0.1)", title="Category"),
-            yaxis=dict(gridcolor="rgba(148,163,184,0.1)", title="Lag (days)"),
+            xaxis=dict(gridcolor="rgba(0,0,0,0.05)", title="Category"),
+            yaxis=dict(gridcolor="rgba(0,0,0,0.05)", title="Lag (days)"),
             margin=dict(l=20, r=20, t=20, b=20),
         )
         
@@ -334,12 +334,12 @@ def render():
             ))
     
     fig_conf.update_layout(
-        template="plotly_dark",
-        plot_bgcolor="rgba(15, 23, 42, 0.8)",
+        template="plotly_white",
+        plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
         height=300,
-        yaxis=dict(title="Confidence (%)", gridcolor="rgba(148,163,184,0.1)"),
-        xaxis=dict(gridcolor="rgba(148,163,184,0.1)"),
+        yaxis=dict(title="Confidence (%)", gridcolor="rgba(0,0,0,0.05)"),
+        xaxis=dict(gridcolor="rgba(0,0,0,0.05)"),
         margin=dict(l=20, r=20, t=20, b=20),
     )
     

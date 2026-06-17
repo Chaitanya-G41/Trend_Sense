@@ -122,14 +122,14 @@ def render():
             ))
         
         fig.update_layout(
-            template="plotly_dark",
-            plot_bgcolor="rgba(15, 23, 42, 0.8)",
+            template="plotly_white",
+            plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
             margin=dict(l=20, r=20, t=30, b=20),
             legend=dict(orientation="h", yanchor="bottom", y=1.02),
-            xaxis=dict(gridcolor="rgba(148,163,184,0.1)"),
-            yaxis=dict(gridcolor="rgba(148,163,184,0.1)", title="Sales ($)"),
+            xaxis=dict(gridcolor="rgba(0,0,0,0.05)"),
+            yaxis=dict(gridcolor="rgba(0,0,0,0.05)", title="Sales ($)"),
         )
         
         st.plotly_chart(fig, use_container_width=True)
@@ -145,13 +145,13 @@ def render():
             opacity=0.8,
         ))
         fig2.update_layout(
-            template="plotly_dark",
-            plot_bgcolor="rgba(15, 23, 42, 0.8)",
+            template="plotly_white",
+            plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
             margin=dict(l=20, r=20, t=30, b=20),
-            xaxis=dict(title="Weekly Sales ($)", gridcolor="rgba(148,163,184,0.1)"),
-            yaxis=dict(title="Frequency", gridcolor="rgba(148,163,184,0.1)"),
+            xaxis=dict(title="Weekly Sales ($)", gridcolor="rgba(0,0,0,0.05)"),
+            yaxis=dict(title="Frequency", gridcolor="rgba(0,0,0,0.05)"),
         )
         st.plotly_chart(fig2, use_container_width=True)
     
@@ -179,13 +179,13 @@ def render():
         ))
         
         fig3.update_layout(
-            template="plotly_dark",
-            plot_bgcolor="rgba(15, 23, 42, 0.8)",
+            template="plotly_white",
+            plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=350,
             margin=dict(l=20, r=20, t=10, b=20),
-            xaxis=dict(title="Store ID", gridcolor="rgba(148,163,184,0.1)"),
-            yaxis=dict(title="Avg Weekly Sales ($)", gridcolor="rgba(148,163,184,0.1)"),
+            xaxis=dict(title="Store ID", gridcolor="rgba(0,0,0,0.05)"),
+            yaxis=dict(title="Avg Weekly Sales ($)", gridcolor="rgba(0,0,0,0.05)"),
         )
         st.plotly_chart(fig3, use_container_width=True)
     

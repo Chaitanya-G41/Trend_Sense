@@ -57,23 +57,23 @@ def render():
                 badge = "⭐ BEST" if is_best else ""
                 
                 st.markdown(f"""
-                <div style="background: linear-gradient(135deg, #1E293B, #334155);
+                <div style="background: #FFFFFF;
                             border: 2px solid {border_color}; border-radius: 16px;
-                            padding: 20px; text-align: center;">
-                    <div style="font-size: 0.8rem; color: #94A3B8; text-transform: uppercase;
+                            padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase;
                                 letter-spacing: 1px;">{model_name} {badge}</div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: {'#10B981' if is_best else '#6366F1'};
+                    <div style="font-size: 1.8rem; font-weight: 800; color: {'#10B981' if is_best else '#4F46E5'};
                                 margin: 8px 0;">{metrics.get('MAPE (%)', 'N/A')}%</div>
-                    <div style="font-size: 0.75rem; color: #64748B;">MAPE</div>
-                    <hr style="border-color: rgba(148,163,184,0.2); margin: 12px 0;">
+                    <div style="font-size: 0.75rem; color: #94A3B8;">MAPE</div>
+                    <hr style="border-color: #F1F5F9; margin: 12px 0;">
                     <div style="display: flex; justify-content: space-around;">
                         <div>
-                            <div style="color: #94A3B8; font-size: 0.7rem;">RMSE</div>
-                            <div style="color: #F8FAFC; font-weight: 600;">{metrics.get('RMSE', 'N/A')}</div>
+                            <div style="color: #64748B; font-size: 0.7rem;">RMSE</div>
+                            <div style="color: #1E293B; font-weight: 600;">{metrics.get('RMSE', 'N/A')}</div>
                         </div>
                         <div>
-                            <div style="color: #94A3B8; font-size: 0.7rem;">R²</div>
-                            <div style="color: #F8FAFC; font-weight: 600;">{metrics.get('R²', 'N/A')}</div>
+                            <div style="color: #64748B; font-size: 0.7rem;">R²</div>
+                            <div style="color: #1E293B; font-weight: 600;">{metrics.get('R²', 'N/A')}</div>
                         </div>
                     </div>
                 </div>
@@ -101,16 +101,16 @@ def render():
                              text=[f"{v:.3f}" for v in r2_vals], textposition="outside"), row=1, col=3)
         
         fig.update_layout(
-            template="plotly_dark",
-            plot_bgcolor="rgba(15, 23, 42, 0.8)",
+            template="plotly_white",
+            plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
             showlegend=False,
             margin=dict(l=20, r=20, t=40, b=20),
         )
         for i in range(1, 4):
-            fig.update_xaxes(gridcolor="rgba(148,163,184,0.1)", row=1, col=i)
-            fig.update_yaxes(gridcolor="rgba(148,163,184,0.1)", row=1, col=i)
+            fig.update_xaxes(gridcolor="rgba(0,0,0,0.05)", row=1, col=i)
+            fig.update_yaxes(gridcolor="rgba(0,0,0,0.05)", row=1, col=i)
         
         st.plotly_chart(fig, use_container_width=True)
     
@@ -126,10 +126,11 @@ def render():
             delta = baseline_mape - comparison_data[name].get("MAPE (%)", 0)
             color = "#10B981" if delta > 0 else "#EF4444"
             st.markdown(f"""
-            <div style="background: linear-gradient(135deg, #1E293B, #334155);
+            <div style="background: #FFFFFF; border: 1px solid #E2E8F0;
                         border-radius: 12px; padding: 16px; margin: 8px 0;
-                        display: flex; align-items: center; justify-content: space-between;">
-                <span style="color: #F8FAFC; font-weight: 600;">{name} vs {model_names[0]}</span>
+                        display: flex; align-items: center; justify-content: space-between;
+                        box-shadow: 0 4px 10px rgba(0,0,0,0.01);">
+                <span style="color: #334155; font-weight: 600;">{name} vs {model_names[0]}</span>
                 <span style="color: {color}; font-weight: 800; font-size: 1.3rem;">
                     {'↓' if delta > 0 else '↑'} {abs(delta):.2f}% MAPE
                 </span>
@@ -172,18 +173,18 @@ def render():
             x=x_range + x_range[::-1],
             y=list(upper) + list(lower[::-1]),
             fill="toself",
-            fillcolor="rgba(239, 68, 68, 0.1)",
+            fillcolor="rgba(239, 68, 68, 0.05)",
             line=dict(color="rgba(0,0,0,0)"),
             name="95% Confidence",
         ))
         
         fig2.update_layout(
-            template="plotly_dark",
-            plot_bgcolor="rgba(15, 23, 42, 0.8)",
+            template="plotly_white",
+            plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
-            xaxis=dict(title="Week (Test Period)", gridcolor="rgba(148,163,184,0.1)"),
-            yaxis=dict(title="Weekly Sales ($)", gridcolor="rgba(148,163,184,0.1)"),
+            xaxis=dict(title="Week (Test Period)", gridcolor="rgba(0,0,0,0.05)"),
+            yaxis=dict(title="Weekly Sales ($)", gridcolor="rgba(0,0,0,0.05)"),
             legend=dict(orientation="h", yanchor="bottom", y=1.02),
         )
         
@@ -212,12 +213,12 @@ def render():
         ))
         
         fig3.update_layout(
-            template="plotly_dark",
-            plot_bgcolor="rgba(15, 23, 42, 0.8)",
+            template="plotly_white",
+            plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=max(400, top_n * 28),
-            xaxis=dict(title="Feature Importance", gridcolor="rgba(148,163,184,0.1)"),
-            yaxis=dict(gridcolor="rgba(148,163,184,0.1)"),
+            xaxis=dict(title="Feature Importance", gridcolor="rgba(0,0,0,0.05)"),
+            yaxis=dict(gridcolor="rgba(0,0,0,0.05)"),
             margin=dict(l=200),
         )
         
