@@ -22,7 +22,7 @@ def render():
     
     st.markdown("""
     <div class="main-header">
-        <h1>🤖 Model Predictions</h1>
+        <h1><span class="material-symbols-outlined" style="margin-right: 12px; color: #7C3AED;">online_prediction</span> Model Predictions</h1>
         <p>XGBoost vs Random Forest vs ARIMA — performance comparison and analysis</p>
     </div>
     """, unsafe_allow_html=True)
@@ -53,27 +53,28 @@ def render():
                 is_best = metrics.get("MAPE (%)", 100) == min(
                     m.get("MAPE (%)", 100) for m in comparison_data.values()
                 )
-                border_color = "#10B981" if is_best else "rgba(99, 102, 241, 0.3)"
-                badge = " BEST" if is_best else ""
+                border_color = "#7C3AED" if is_best else "#E5E7EB"
+                badge = " (BEST)" if is_best else ""
+                text_color = "#7C3AED" if is_best else "#111827"
                 
                 st.markdown(f"""
                 <div style="background: #FFFFFF;
                             border: 2px solid {border_color}; border-radius: 16px;
-                            padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                    <div style="font-size: 0.8rem; color: #64748B; text-transform: uppercase;
-                                letter-spacing: 1px;">{model_name} {badge}</div>
-                    <div style="font-size: 1.8rem; font-weight: 800; color: {'#10B981' if is_best else '#4F46E5'};
+                            padding: 24px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <div style="font-size: 0.875rem; color: #6B7280; text-transform: uppercase;
+                                letter-spacing: 0.05em; font-weight: 500;">{model_name}<span style="color:#A78BFA; font-weight:700;">{badge}</span></div>
+                    <div style="font-size: 2rem; font-weight: 700; color: {text_color};
                                 margin: 8px 0;">{metrics.get('MAPE (%)', 'N/A')}%</div>
-                    <div style="font-size: 0.75rem; color: #94A3B8;">MAPE</div>
-                    <hr style="border-color: #F1F5F9; margin: 12px 0;">
+                    <div style="font-size: 0.75rem; color: #9CA3AF;">MAPE</div>
+                    <hr style="border: none; height: 1px; background-color: #E5E7EB; margin: 16px 0;">
                     <div style="display: flex; justify-content: space-around;">
                         <div>
-                            <div style="color: #64748B; font-size: 0.7rem;">RMSE</div>
-                            <div style="color: #1E293B; font-weight: 600;">{metrics.get('RMSE', 'N/A')}</div>
+                            <div style="color: #6B7280; font-size: 0.75rem;">RMSE</div>
+                            <div style="color: #111827; font-weight: 600;">{metrics.get('RMSE', 'N/A')}</div>
                         </div>
                         <div>
-                            <div style="color: #64748B; font-size: 0.7rem;">R²</div>
-                            <div style="color: #1E293B; font-weight: 600;">{metrics.get('R²', 'N/A')}</div>
+                            <div style="color: #6B7280; font-size: 0.75rem;">R²</div>
+                            <div style="color: #111827; font-weight: 600;">{metrics.get('R²', 'N/A')}</div>
                         </div>
                     </div>
                 </div>
@@ -87,18 +88,21 @@ def render():
                                                               "R² ↑ Higher is Better"])
         
         models = list(comparison_data.keys())
-        colors = ["#EF4444", "#F59E0B", "#10B981"][:len(models)]
+        colors = ["#E5E7EB", "#C4B5FD", "#7C3AED"][:len(models)]
         
         mape_vals = [comparison_data[m].get("MAPE (%)", 0) for m in models]
         rmse_vals = [comparison_data[m].get("RMSE", 0) for m in models]
         r2_vals = [comparison_data[m].get("R²", 0) for m in models]
         
         fig.add_trace(go.Bar(x=models, y=mape_vals, marker_color=colors,
-                             text=[f"{v:.1f}%" for v in mape_vals], textposition="outside"), row=1, col=1)
+                             text=[f"{v:.1f}%" for v in mape_vals], textposition="outside",
+                             textfont=dict(color="#6B7280")), row=1, col=1)
         fig.add_trace(go.Bar(x=models, y=rmse_vals, marker_color=colors,
-                             text=[f"{v:.0f}" for v in rmse_vals], textposition="outside"), row=1, col=2)
+                             text=[f"{v:.0f}" for v in rmse_vals], textposition="outside",
+                             textfont=dict(color="#6B7280")), row=1, col=2)
         fig.add_trace(go.Bar(x=models, y=r2_vals, marker_color=colors,
-                             text=[f"{v:.3f}" for v in r2_vals], textposition="outside"), row=1, col=3)
+                             text=[f"{v:.3f}" for v in r2_vals], textposition="outside",
+                             textfont=dict(color="#6B7280")), row=1, col=3)
         
         fig.update_layout(
             template="plotly_white",
@@ -106,11 +110,11 @@ def render():
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
             showlegend=False,
-            margin=dict(l=20, r=20, t=40, b=20),
+            margin=dict(l=0, r=0, t=40, b=0),
         )
         for i in range(1, 4):
-            fig.update_xaxes(gridcolor="rgba(0,0,0,0.05)", row=1, col=i)
-            fig.update_yaxes(gridcolor="rgba(0,0,0,0.05)", row=1, col=i)
+            fig.update_xaxes(gridcolor="#F3F4F6", color="#6B7280", row=1, col=i)
+            fig.update_yaxes(gridcolor="#F3F4F6", color="#6B7280", row=1, col=i)
         
         st.plotly_chart(fig, use_container_width=True)
     
@@ -139,7 +143,7 @@ def render():
     
     # ─── Prediction vs Actual ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader(" Prediction vs Actual (Test Set)")
+    st.subheader(":material/monitoring: Prediction vs Actual (Test Set)")
     
     # Generate predictions using loaded model or simulate
     predictions, actuals = generate_predictions(featured_df, models_info)
@@ -153,14 +157,14 @@ def render():
             x=x_range, y=actuals,
             mode="lines",
             name="Actual Sales",
-            line=dict(color="#3B82F6", width=2.5),
+            line=dict(color="#111827", width=2.5),
         ))
         
         fig2.add_trace(go.Scatter(
             x=x_range, y=predictions,
             mode="lines",
             name="Predicted Sales",
-            line=dict(color="#EF4444", width=2.5, dash="dash"),
+            line=dict(color="#7C3AED", width=2.5, dash="dash"),
         ))
         
         # Confidence band
@@ -173,7 +177,7 @@ def render():
             x=x_range + x_range[::-1],
             y=list(upper) + list(lower[::-1]),
             fill="toself",
-            fillcolor="rgba(239, 68, 68, 0.05)",
+            fillcolor="rgba(124, 58, 237, 0.08)",
             line=dict(color="rgba(0,0,0,0)"),
             name="95% Confidence",
         ))
@@ -183,16 +187,18 @@ def render():
             plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
-            xaxis=dict(title="Week (Test Period)", gridcolor="rgba(0,0,0,0.05)"),
-            yaxis=dict(title="Weekly Sales ($)", gridcolor="rgba(0,0,0,0.05)"),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02),
+            xaxis=dict(title="Week (Test Period)", gridcolor="#F3F4F6", color="#6B7280"),
+            yaxis=dict(title="Weekly Sales ($)", gridcolor="#F3F4F6", color="#6B7280"),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, font=dict(color="#6B7280")),
+            margin=dict(l=0, r=0, t=30, b=0),
+            hovermode="x unified"
         )
         
         st.plotly_chart(fig2, use_container_width=True)
     
     # ─── Feature Importance ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader("🏆 Feature Importance (XGBoost)")
+    st.subheader(":material/tune: Feature Importance (XGBoost)")
     
     importance_df = get_feature_importance(models_info, featured_df)
     

@@ -22,7 +22,7 @@ def render():
     # Header
     st.markdown("""
     <div class="main-header">
-        <h1> TrendSense Dashboard</h1>
+        <h1><span class="material-symbols-outlined" style="margin-right: 12px; color: #7C3AED;">dashboard</span> Overview</h1>
         <p>AI-Powered Social Media Trend Prediction for Business Decision Making</p>
     </div>
     """, unsafe_allow_html=True)
@@ -31,13 +31,11 @@ def render():
     walmart_df, trends_df = load_data()
     
     if walmart_df is None:
-        st.warning(" No data available. Please run the pipeline first: `python run_pipeline.py`")
+        st.warning(":material/warning: No data available. Please run the pipeline first: `python run_pipeline.py`")
         st.code("python run_pipeline.py --synthetic-trends", language="bash")
         return
     
     # ─── KPI Cards ───
-    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    
     col1, col2, col3, col4 = st.columns(4)
     
     total_stores = walmart_df["Store"].nunique() if "Store" in walmart_df.columns else 1
@@ -48,27 +46,36 @@ def render():
     with col1:
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-label">Total Stores</div>
+            <div class="kpi-header">
+                <span class="material-symbols-outlined">storefront</span>
+                Total Stores
+            </div>
             <div class="kpi-value">{total_stores}</div>
-            <div class="kpi-label">Active</div>
+            <div class="kpi-subtext">Active locations</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-label">Avg Weekly Sales</div>
+            <div class="kpi-header">
+                <span class="material-symbols-outlined">payments</span>
+                Avg Weekly Sales
+            </div>
             <div class="kpi-value">${avg_sales:,.0f}</div>
-            <div class="kpi-label">Per Store</div>
+            <div class="kpi-subtext">Per Store</div>
         </div>
         """, unsafe_allow_html=True)
     
     with col3:
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-label">Total Revenue</div>
+            <div class="kpi-header">
+                <span class="material-symbols-outlined">account_balance_wallet</span>
+                Total Revenue
+            </div>
             <div class="kpi-value">${total_sales/1e6:,.1f}M</div>
-            <div class="kpi-label">All Stores</div>
+            <div class="kpi-subtext">All Stores</div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -76,19 +83,22 @@ def render():
         delta_sign = "+" if holiday_impact > 0 else ""
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-label">Holiday Impact</div>
+            <div class="kpi-header">
+                <span class="material-symbols-outlined">celebration</span>
+                Holiday Impact
+            </div>
             <div class="kpi-value">{delta_sign}${holiday_impact:,.0f}</div>
-            <div class="kpi-label">Avg Boost</div>
+            <div class="kpi-subtext">Avg Boost</div>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
     # ─── Sales Trend Chart ───
-    col_left, col_right = st.columns([2, 1])
+    col_left, col_right = st.columns([2, 1], gap="large")
     
     with col_left:
-        st.subheader(" Weekly Sales Trend")
+        st.subheader(":material/timeline: Weekly Sales Trend")
         
         # Aggregate by date
         if "Store" in walmart_df.columns:
@@ -106,9 +116,9 @@ def render():
             x=agg_df["Date"], y=agg_df["Weekly_Sales"],
             mode="lines",
             name="Avg Weekly Sales",
-            line=dict(color="#6366F1", width=2.5),
+            line=dict(color="#7C3AED", width=2.5, shape="spline", smoothing=0.5),
             fill="tonexty" if len(agg_df) < 500 else None,
-            fillcolor="rgba(99, 102, 241, 0.1)",
+            fillcolor="rgba(124, 58, 237, 0.08)",
         ))
         
         # Holiday markers
@@ -118,7 +128,7 @@ def render():
                 x=holidays["Date"], y=holidays["Weekly_Sales"],
                 mode="markers",
                 name="Holiday Weeks",
-                marker=dict(color="#F59E0B", size=10, symbol="star"),
+                marker=dict(color="#A78BFA", size=8, symbol="circle", line=dict(color="#FFFFFF", width=1.5)),
             ))
         
         fig.update_layout(
@@ -126,22 +136,23 @@ def render():
             plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
-            margin=dict(l=20, r=20, t=30, b=20),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02),
-            xaxis=dict(gridcolor="rgba(0,0,0,0.05)"),
-            yaxis=dict(gridcolor="rgba(0,0,0,0.05)", title="Sales ($)"),
+            margin=dict(l=0, r=0, t=10, b=0),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, font=dict(color="#6B7280")),
+            xaxis=dict(gridcolor="#F3F4F6", title=""),
+            yaxis=dict(gridcolor="#F3F4F6", title="Sales ($)", color="#6B7280"),
+            hovermode="x unified",
         )
         
         st.plotly_chart(fig, use_container_width=True)
     
     with col_right:
-        st.subheader(" Sales Distribution")
+        st.subheader(":material/bar_chart: Sales Distribution")
         
         fig2 = go.Figure()
         fig2.add_trace(go.Histogram(
             x=walmart_df["Weekly_Sales"],
             nbinsx=40,
-            marker_color="#8B5CF6",
+            marker_color="#A78BFA",
             opacity=0.8,
         ))
         fig2.update_layout(
@@ -149,15 +160,16 @@ def render():
             plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
             height=400,
-            margin=dict(l=20, r=20, t=30, b=20),
-            xaxis=dict(title="Weekly Sales ($)", gridcolor="rgba(0,0,0,0.05)"),
-            yaxis=dict(title="Frequency", gridcolor="rgba(0,0,0,0.05)"),
+            margin=dict(l=0, r=0, t=10, b=0),
+            xaxis=dict(title="Weekly Sales ($)", gridcolor="#F3F4F6", color="#6B7280"),
+            yaxis=dict(title="Frequency", gridcolor="#F3F4F6", color="#6B7280"),
+            bargap=0.1,
         )
         st.plotly_chart(fig2, use_container_width=True)
     
     # ─── Store Performance ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader("🏪 Store Performance Comparison")
+    st.subheader(":material/store: Store Performance Comparison")
     
     if "Store" in walmart_df.columns:
         store_perf = walmart_df.groupby("Store")["Weekly_Sales"].agg(["mean", "std", "min", "max"]).reset_index()
@@ -170,29 +182,30 @@ def render():
             y=store_perf["Avg Sales"],
             marker=dict(
                 color=store_perf["Avg Sales"],
-                colorscale="Viridis",
-                showscale=True,
-                colorbar=dict(title="Avg Sales"),
+                colorscale=[[0, "#C4B5FD"], [1, "#7C3AED"]],
+                showscale=False,
             ),
-            text=store_perf["Avg Sales"].apply(lambda x: f"${x:,.0f}"),
+            text=store_perf["Avg Sales"].apply(lambda x: f"${x/1000:,.0f}k"),
             textposition="outside",
+            textfont=dict(color="#6B7280", size=10)
         ))
         
         fig3.update_layout(
             template="plotly_white",
             plot_bgcolor="rgba(0,0,0,0)",
             paper_bgcolor="rgba(0,0,0,0)",
-            height=350,
-            margin=dict(l=20, r=20, t=10, b=20),
-            xaxis=dict(title="Store ID", gridcolor="rgba(0,0,0,0.05)"),
-            yaxis=dict(title="Avg Weekly Sales ($)", gridcolor="rgba(0,0,0,0.05)"),
+            height=300,
+            margin=dict(l=0, r=0, t=10, b=0),
+            xaxis=dict(title="Store ID", gridcolor="#F3F4F6", color="#6B7280"),
+            yaxis=dict(title="Avg Weekly Sales ($)", gridcolor="#F3F4F6", color="#6B7280"),
+            bargap=0.2,
         )
         st.plotly_chart(fig3, use_container_width=True)
     
     # ─── Recent TVI Alerts ───
     if trends_df is not None and len(trends_df) > 0:
         st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        st.subheader(" Recent Trend Alerts")
+        st.subheader(":material/notifications_active: Recent Trend Alerts")
         
         from src.tvi import compute_tvi_features
         
@@ -207,10 +220,10 @@ def render():
                 spike_count = len(tvi_feat[tvi_feat["is_spike"]])
                 latest_tvi = tvi_feat["tvi"].dropna().iloc[-1] if len(tvi_feat["tvi"].dropna()) > 0 else 0
                 
-                status = "🟢" if abs(latest_tvi) < 10 else ("🟡" if abs(latest_tvi) < 30 else "🔴")
+                status_icon = ":material/check_circle:" if abs(latest_tvi) < 10 else (":material/warning:" if abs(latest_tvi) < 30 else ":material/error:")
                 
                 st.metric(
-                    label=f"{status} {keyword}",
+                    label=f"{status_icon} {keyword}",
                     value=f"{latest_tvi:.1f}%",
                     delta=f"{spike_count} spikes detected",
                 )

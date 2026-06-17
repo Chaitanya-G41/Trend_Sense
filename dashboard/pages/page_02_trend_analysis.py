@@ -22,7 +22,7 @@ def render():
     
     st.markdown("""
     <div class="main-header">
-        <h1> Trend Analysis</h1>
+        <h1><span class="material-symbols-outlined" style="margin-right: 12px; color: #7C3AED;">trending_up</span> Trend Analysis</h1>
         <p>Google Trends interest, Trend Velocity Index (TVI), and spike detection</p>
     </div>
     """, unsafe_allow_html=True)
@@ -58,15 +58,15 @@ def render():
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
-        st.metric(" Mean TVI", f"{summary['mean_tvi']:.1f}%")
+        st.metric("Mean TVI", f"{summary['mean_tvi']:.1f}%")
     with col2:
-        st.metric(" Std TVI", f"{summary['std_tvi']:.1f}%")
+        st.metric("Std TVI", f"{summary['std_tvi']:.1f}%")
     with col3:
-        st.metric("🔥 Total Spikes", summary['total_spikes'])
+        st.metric("Total Spikes", summary['total_spikes'])
     with col4:
-        st.metric("🔴 Severe Spikes", summary['severe_spikes'])
+        st.metric("Severe Spikes", summary['severe_spikes'])
     with col5:
-        st.metric(" Spike Rate", f"{summary['spike_rate_pct']}%")
+        st.metric("Spike Rate", f"{summary['spike_rate_pct']}%")
     
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
@@ -92,9 +92,9 @@ def render():
         x=dates, y=tvi_feat["raw_trend"],
         mode="lines",
         name="Search Interest",
-        line=dict(color="#3B82F6", width=2),
+        line=dict(color="#A78BFA", width=2),
         fill="tozeroy",
-        fillcolor="rgba(59, 130, 246, 0.1)",
+        fillcolor="rgba(167, 139, 250, 0.1)",
     ), row=1, col=1)
     
     # Add smoothed trend
@@ -103,18 +103,18 @@ def render():
         x=dates, y=smoothed,
         mode="lines",
         name="4-Week Moving Avg",
-        line=dict(color="#F59E0B", width=2, dash="dash"),
+        line=dict(color="#7C3AED", width=2.5),
     ), row=1, col=1)
     
     # Panel 2: TVI bars
     tvi_vals = tvi_feat["tvi"].fillna(0)
-    colors_tvi = ["#10B981" if v >= 0 else "#EF4444" for v in tvi_vals]
+    colors_tvi = ["#7C3AED" if v >= 0 else "#E5E7EB" for v in tvi_vals]
     
     fig.add_trace(go.Bar(
         x=dates, y=tvi_vals,
         name="TVI",
         marker_color=colors_tvi,
-        opacity=0.75,
+        opacity=0.85,
     ), row=2, col=1)
     
     # Add TVI smoothed line
@@ -122,20 +122,20 @@ def render():
         x=dates, y=tvi_feat["tvi_smoothed"].fillna(0),
         mode="lines",
         name="Smoothed TVI",
-        line=dict(color="#F59E0B", width=2),
+        line=dict(color="#111827", width=1.5, dash="dot"),
     ), row=2, col=1)
     
     # Zero line
-    fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5, row=2, col=1)
+    fig.add_hline(y=0, line_dash="solid", line_color="#E5E7EB", opacity=1, row=2, col=1)
     
     # Panel 3: Spike scatter
     severity_colors = {
-        "NONE": "rgba(148, 163, 184, 0.3)",
-        "MILD": "#F59E0B",
-        "MODERATE": "#F97316",
+        "NONE": "rgba(229, 231, 235, 0.5)",
+        "MILD": "#FBBF24",
+        "MODERATE": "#F59E0B",
         "SEVERE": "#EF4444",
     }
-    severity_sizes = {"NONE": 4, "MILD": 10, "MODERATE": 15, "SEVERE": 22}
+    severity_sizes = {"NONE": 4, "MILD": 8, "MODERATE": 12, "SEVERE": 18}
     
     for severity in ["NONE", "MILD", "MODERATE", "SEVERE"]:
         mask = tvi_feat["spike_severity"] == severity
@@ -148,37 +148,38 @@ def render():
                 marker=dict(
                     color=severity_colors[severity],
                     size=severity_sizes[severity],
-                    line=dict(width=1, color="white") if severity != "NONE" else dict(width=0),
+                    line=dict(width=1, color="#FFFFFF") if severity != "NONE" else dict(width=0),
                 ),
             ), row=3, col=1)
     
     # Threshold lines
     mean_tvi = summary["mean_tvi"]
     std_tvi = summary["std_tvi"]
-    for sigma, label, color in [(2, "+2σ (Moderate)", "#F97316"), (3, "+3σ (Severe)", "#EF4444")]:
+    for sigma, label, color in [(2, "+2σ (Moderate)", "#F59E0B"), (3, "+3σ (Severe)", "#EF4444")]:
         threshold = mean_tvi + sigma * std_tvi
-        fig.add_hline(y=threshold, line_dash="dot", line_color=color, opacity=0.6,
+        fig.add_hline(y=threshold, line_dash="dash", line_color=color, opacity=0.4,
                       annotation_text=label, row=3, col=1)
     
     fig.update_layout(
         template="plotly_white",
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
-        height=900,
-        margin=dict(l=20, r=20, t=40, b=20),
+        height=800,
+        margin=dict(l=0, r=0, t=30, b=0),
         showlegend=True,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, font=dict(color="#6B7280")),
+        hovermode="x unified",
     )
     
     for i in range(1, 4):
-        fig.update_xaxes(gridcolor="rgba(0,0,0,0.05)", row=i, col=1)
-        fig.update_yaxes(gridcolor="rgba(0,0,0,0.05)", row=i, col=1)
+        fig.update_xaxes(gridcolor="#F3F4F6", color="#6B7280", row=i, col=1)
+        fig.update_yaxes(gridcolor="#F3F4F6", color="#6B7280", row=i, col=1)
     
     st.plotly_chart(fig, use_container_width=True)
     
     # ─── Spike Timeline ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader("🔥 Spike Timeline")
+    st.subheader(":material/history: Spike Timeline")
     
     spikes = tvi_feat[tvi_feat["is_spike"]].copy()
     
@@ -189,8 +190,7 @@ def render():
         
         # Color-code severity
         def severity_badge(severity):
-            colors = {"MILD": "🟡", "MODERATE": "🟠", "SEVERE": "🔴"}
-            return f"{colors.get(severity, '⚪')} {severity}"
+            return f"{severity}"
         
         spikes_display["Severity"] = spikes_display["Severity"].apply(severity_badge)
         spikes_display["TVI (%)"] = spikes_display["TVI (%)"].round(1)
@@ -206,7 +206,7 @@ def render():
     # ─── Multi-keyword Comparison ───
     if len(keywords) > 1:
         st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        st.subheader(" Multi-Keyword Comparison")
+        st.subheader(":material/compare_arrows: Multi-Keyword Comparison")
         
         compare_keywords = st.multiselect(
             "Select keywords to compare",
@@ -217,8 +217,7 @@ def render():
         if compare_keywords:
             fig_compare = go.Figure()
             
-            colors_list = ["#6366F1", "#F59E0B", "#10B981", "#EF4444", "#8B5CF6",
-                          "#3B82F6", "#EC4899", "#14B8A6"]
+            colors_list = ["#7C3AED", "#A78BFA", "#C4B5FD", "#4C1D95", "#8B5CF6", "#6D28D9"]
             
             for idx, kw in enumerate(compare_keywords):
                 color = colors_list[idx % len(colors_list)]
@@ -236,9 +235,11 @@ def render():
                 paper_bgcolor="rgba(0,0,0,0)",
                 height=400,
                 title="Search Interest Comparison",
-                xaxis=dict(gridcolor="rgba(0,0,0,0.05)"),
-                yaxis=dict(title="Interest (0-100)", gridcolor="rgba(0,0,0,0.05)"),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02),
+                xaxis=dict(gridcolor="#F3F4F6", color="#6B7280"),
+                yaxis=dict(title="Interest (0-100)", gridcolor="#F3F4F6", color="#6B7280"),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, font=dict(color="#6B7280")),
+                margin=dict(l=0, r=0, t=30, b=0),
+                hovermode="x unified",
             )
             
             st.plotly_chart(fig_compare, use_container_width=True)

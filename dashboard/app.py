@@ -3,8 +3,6 @@ TrendSense — Streamlit Dashboard (Main App)
 =============================================
 Multi-page dashboard for visualizing trend analysis, model predictions,
 and inventory decision support.
-
-Launch: streamlit run dashboard/app.py
 """
 
 import streamlit as st
@@ -21,171 +19,163 @@ import config
 # Page Configuration
 # ──────────────────────────────────
 st.set_page_config(
-    page_title="TrendSense | AI-Powered Demand Forecasting",
-    page_icon="",
+    page_title="TrendSense",
+    page_icon=":material/analytics:",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # ──────────────────────────────────
-# Custom CSS
+# Custom CSS (SaaS Redesign)
 # ──────────────────────────────────
 st.markdown("""
 <style>
-    /* Import Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+    /* Import Inter Font and Material Symbols */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0');
     
     /* Global styles */
     .stApp {
-        background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
-        font-family: 'Outfit', sans-serif;
-        color: #1E293B;
+        background: #F8FAFC;
+        font-family: 'Inter', sans-serif;
+        color: #111827;
+    }
+    
+    /* Typography Overrides */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif !important;
+        color: #111827 !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em;
     }
     
     /* Sidebar background */
     [data-testid="stSidebar"] {
         background: #FFFFFF !important;
-        border-right: 1px solid #E2E8F0;
+        border-right: 1px solid #E5E7EB;
     }
     
-    [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] p, [data-testid="stSidebar"] h3 {
-        color: #334155 !important;
-    }
-    
-    /* Style radio navigation items */
-    .stRadio div[role="radiogroup"] {
-        gap: 8px;
-    }
-    
-    .stRadio div[role="radiogroup"] > label {
-        background: #F8FAFC;
-        color: #475569;
-        border-radius: 12px;
-        padding: 10px 16px;
-        margin-bottom: 6px;
-        border: 1px solid #E2E8F0;
-        transition: all 0.2s ease;
-        font-weight: 500;
-        cursor: pointer;
-    }
-    
-    .stRadio div[role="radiogroup"] > label:hover {
-        background: #F1F5F9;
-        border-color: #CBD5E1;
-        transform: translateX(3px);
-    }
-    
-    .stRadio div[role="radiogroup"] > label[data-checked="true"] {
-        background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%) !important;
-        border-color: #6366F1 !important;
-        color: #4F46E5 !important;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
-        font-weight: 600;
-    }
-    
-    /* KPI Card styling */
-    .kpi-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 18px;
-        padding: 24px;
-        text-align: center;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    
-    .kpi-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
-    }
-    
-    .kpi-value {
-        font-size: 2.2rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #4F46E5, #EC4899);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin: 8px 0;
-    }
-    
-    .kpi-label {
-        font-size: 0.85rem;
-        color: #64748B;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 600;
-    }
-    
-    /* Decision cards */
-    .decision-hold {
-        background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
-        border: 1px solid #10B981;
-        border-radius: 18px;
-        padding: 24px;
-        color: #065F46;
-    }
-    
-    .decision-increase {
-        background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
-        border: 1px solid #F59E0B;
-        border-radius: 18px;
-        padding: 24px;
-        color: #78350F;
-    }
-    
-    .decision-urgent {
-        background: linear-gradient(135deg, #FEF2F2, #FEE2E2);
-        border: 1px solid #EF4444;
-        border-radius: 18px;
-        padding: 24px;
-        color: #991B1B;
-        animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-        0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
-        50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-    }
-    
-    /* Header styling */
+    /* Minimalist Header Area */
     .main-header {
-        background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 50%, #FDF2F8 100%);
-        border-radius: 20px;
-        padding: 32px;
-        margin-bottom: 24px;
-        border: 1px solid #E0E7FF;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #E5E7EB;
     }
     
     .main-header h1 {
-        background: linear-gradient(135deg, #4F46E5, #9333EA);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin: 0;
+        font-size: 2.25rem !important;
+        font-weight: 700 !important;
+        color: #111827 !important;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
     }
     
     .main-header p {
-        color: #475569;
-        font-size: 1.1rem;
+        color: #6B7280;
+        font-size: 1rem;
+        margin-top: 0;
+        font-weight: 400;
+    }
+    
+    /* KPI Card styling (Glassmorphism & SaaS) */
+    .kpi-card {
+        background: #FFFFFF;
+        border: 1px solid #E5E7EB;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .kpi-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+        border-color: #C4B5FD;
+    }
+    
+    .kpi-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        color: #6B7280;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .kpi-header span.material-symbols-outlined {
+        font-size: 1.25rem;
+        margin-right: 8px;
+        color: #A78BFA;
+    }
+    
+    .kpi-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 4px 0;
+        line-height: 1.2;
+    }
+    
+    .kpi-subtext {
+        font-size: 0.875rem;
+        color: #9CA3AF;
         margin-top: 8px;
     }
     
-    /* Sidebar logo area */
+    /* Decision Cards */
+    .decision-hold {
+        background: #FFFFFF;
+        border: 1px solid #E5E7EB;
+        border-left: 4px solid #10B981;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .decision-increase {
+        background: #FFFFFF;
+        border: 1px solid #E5E7EB;
+        border-left: 4px solid #F59E0B;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .decision-urgent {
+        background: #FEF2F2;
+        border: 1px solid #FECACA;
+        border-left: 4px solid #EF4444;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    /* Sidebar Brand */
     .sidebar-brand {
-        text-align: center;
-        padding: 20px 0;
-        border-bottom: 1px solid #F1F5F9;
-        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        padding: 16px 0 24px 0;
+        margin-bottom: 8px;
+    }
+    
+    .sidebar-brand .material-symbols-outlined {
+        color: #7C3AED;
+        font-size: 1.75rem;
+        margin-right: 12px;
     }
     
     .sidebar-brand h2 {
-        background: linear-gradient(135deg, #4F46E5, #EC4899);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 1.6rem;
-        font-weight: 800;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0;
+        letter-spacing: -0.02em;
     }
     
     /* Hide Streamlit branding */
@@ -195,48 +185,37 @@ st.markdown("""
     
     /* Custom separator */
     .custom-divider {
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #E2E8F0, transparent);
-        margin: 24px 0;
+        height: 1px;
+        background: #E5E7EB;
+        margin: 32px 0;
         border: none;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ──────────────────────────────────
-# Sidebar
+# Sidebar Brand Override
 # ──────────────────────────────────
 with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
-        <h2> TrendSense</h2>
-        <p style="color: #94A3B8; font-size: 0.8rem;">AI-Powered Demand Forecasting</p>
+        <span class="material-symbols-outlined">analytics</span>
+        <h2>TrendSense</h2>
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("### Navigation")
-    page = st.radio(
-        "Go to",
-        ["Overview", "Trend Analysis", "Predictions", "Decision Support"],
-        label_visibility="collapsed",
-    )
-
 # ──────────────────────────────────
-# Page Router
+# Streamlit Native Navigation (SaaS Router)
 # ──────────────────────────────────
-# Default selected category to General since we removed the sidebar dropdown
 st.session_state["selected_category"] = "General"
 
-if page == "Overview":
-    from pages import page_01_overview
-    page_01_overview.render()
-elif page == "Trend Analysis":
-    from pages import page_02_trend_analysis
-    page_02_trend_analysis.render()
-elif page == "Predictions":
-    from pages import page_03_predictions
-    page_03_predictions.render()
-elif page == "Decision Support":
-    from pages import page_04_decision_support
-    page_04_decision_support.render()
+from pages import page_01_overview, page_02_trend_analysis, page_03_predictions, page_04_decision_support
 
+pg = st.navigation([
+    st.Page(page_01_overview.render, title="Overview", icon=":material/dashboard:", url_path="overview"),
+    st.Page(page_02_trend_analysis.render, title="Trend Analysis", icon=":material/trending_up:", url_path="trend_analysis"),
+    st.Page(page_03_predictions.render, title="Predictions", icon=":material/online_prediction:", url_path="predictions"),
+    st.Page(page_04_decision_support.render, title="Decision Support", icon=":material/lightbulb:", url_path="decision_support"),
+])
+
+pg.run()
