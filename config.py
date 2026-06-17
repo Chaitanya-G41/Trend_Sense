@@ -132,8 +132,8 @@ TEST_SIZE_WEEKS = 12  # 12 weeks holdout for final test
 # Decision Engine Thresholds
 # ──────────────────────────────────────────────
 DECISION_THRESHOLDS = {
-    "HOLD": 0.10,            # predicted change < 10%
-    "INCREASE_STOCK": 0.40,  # 10% ≤ predicted change < 40%
+    "HOLD": 0.03,            # predicted change < 3.0%
+    "INCREASE_STOCK": 0.40,  # 3.0% ≤ predicted change < 40%
     # URGENT RESTOCK: predicted change ≥ 40%
 }
 

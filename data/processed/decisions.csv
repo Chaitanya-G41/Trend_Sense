@@ -1,14 +1,13 @@
 action,urgency,color,confidence,confidence_pct,predicted_demand,current_stock,predicted_change_pct,category,rationale,tvi_spike,tvi_severity,spike_boost_applied,index
-HOLD,1,green,0.85,85%,1.533207e+06,1545059.47,-0.8,General,"Predicted demand change is -0.8%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,0
-HOLD,1,green,0.85,85%,744176.9,734685.98,1.3,General,"Predicted demand change is +1.3%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,1
-HOLD,1,green,0.85,85%,1.6483865e+06,1685607.28,-2.2,General,"Predicted demand change is -2.2%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,2
-HOLD,1,green,0.85,85%,728697.75,708594.81,2.8,General,"Predicted demand change is +2.8%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,3
-HOLD,1,green,0.85,85%,809599.5,848183.67,-4.5,General,"Predicted demand change is -4.5%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,4
-HOLD,1,green,0.75,75%,1.2404751e+06,1275877.97,-2.8,General,"Predicted demand change is -2.8%, below the 10% threshold. Current stock levels are adequate.",True,MILD,False,5
-HOLD,1,green,0.85,85%,1.8460148e+06,1771353.38,4.2,General,"Predicted demand change is +4.2%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,6
-HOLD,1,green,0.85,85%,365569.16,380704.31,-4.0,General,"Predicted demand change is -4.0%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,7
-INCREASE STOCK,2,amber,0.75,75%,1.761653e+06,1822828.6,-3.4,General,"Predicted demand change is -3.4%, below the 10% threshold. Current stock levels are adequate.
-⚡ Urgency boosted due to MODERATE TVI spike detected (TVI = 28.2).",True,MODERATE,True,8
-HOLD,1,green,0.85,85%,531172.25,521796.0,1.8,General,"Predicted demand change is +1.8%, below the 10% threshold. Current stock levels are adequate.",True,MILD,False,9
-HOLD,1,green,0.85,85%,436690.25,442130.54,-1.2,General,"Predicted demand change is -1.2%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,10
-HOLD,1,green,0.85,85%,423171.84,402376.23,5.2,General,"Predicted demand change is +5.2%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,11
+HOLD,1,green,0.85,85%,1034333.6,996655.93,3.8,General,"Predicted demand change is +3.8%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,0
+HOLD,1,green,0.85,85%,944058.4,926552.25,1.9,General,"Predicted demand change is +1.9%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,1
+HOLD,1,green,0.85,85%,1779659.6,1645911.97,8.1,General,"Predicted demand change is +8.1%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,2
+HOLD,1,green,0.85,85%,448629.88,442130.54,1.5,General,"Predicted demand change is +1.5%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,3
+HOLD,1,green,0.85,85%,2156504.2,2094904.54,2.9,General,"Predicted demand change is +2.9%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,4
+HOLD,1,green,0.85,85%,586010.56,564595.75,3.8,General,"Predicted demand change is +3.8%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,5
+HOLD,1,green,0.85,85%,2458251.8,2415454.2,1.8,General,"Predicted demand change is +1.8%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,6
+HOLD,1,green,0.85,85%,589698.6,577569.86,2.1,General,"Predicted demand change is +2.1%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,7
+HOLD,1,green,0.85,85%,1370103.6,1398031.12,-2.0,General,"Predicted demand change is -2.0%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,8
+HOLD,1,green,0.85,85%,657306.3,612677.53,7.3,General,"Predicted demand change is +7.3%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,9
+HOLD,1,green,0.85,85%,2541131.0,2447893.84,3.8,General,"Predicted demand change is +3.8%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,10
+HOLD,1,green,0.85,85%,416922.62,402376.23,3.6,General,"Predicted demand change is +3.6%, below the 10% threshold. Current stock levels are adequate.",False,NONE,False,11

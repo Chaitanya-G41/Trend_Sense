@@ -24,7 +24,7 @@ def render():
     
     st.markdown("""
     <div class="main-header">
-        <h1>🎯 Decision Support System</h1>
+        <h1>Decision Support System</h1>
         <p>AI-powered inventory recommendations — HOLD / INCREASE STOCK / URGENT RESTOCK</p>
     </div>
     """, unsafe_allow_html=True)
@@ -36,7 +36,7 @@ def render():
     model_path = os.path.join(config.MODELS_DIR, "xgboost_tvi.pkl")
     
     if not os.path.exists(data_path) or not os.path.exists(model_path):
-        st.warning("⚠️ No trained models or processed data found. Please run the pipeline first:")
+        st.warning("No trained models or processed data found. Please run the pipeline first:")
         st.code("python run_pipeline.py", language="bash")
         return
         
@@ -45,15 +45,15 @@ def render():
     model = model_data["model"]
     
     # ─── Inputs ───
-    st.subheader("⚙️ Store & Category Selection")
+    st.subheader("Store & Category Selection")
     
     col1, col2 = st.columns(2)
     with col1:
         stores = sorted(df["Store"].unique())
-        selected_store = st.selectbox("🏬 Select Store ID", stores)
+        selected_store = st.selectbox("Select Store ID", stores)
     with col2:
         categories = list(config.DEFAULT_CATEGORY_LAGS.keys())
-        selected_category = st.selectbox("📂 Select Product Category", categories, index=0)
+        selected_category = st.selectbox("Select Product Category", categories, index=0)
         
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
@@ -142,7 +142,7 @@ def render():
     )
     
     # ─── Decision Output Card ───
-    st.subheader("📊 Recommendation for Next Week")
+    st.subheader("Recommendation for Next Week")
     
     action = decision["action"]
     confidence = decision["confidence_pct"]
@@ -186,16 +186,16 @@ def render():
     """, unsafe_allow_html=True)
     
     # Rationale expander
-    with st.expander("📋 Decision Rationale", expanded=True):
+    with st.expander("Decision Rationale", expanded=True):
         st.markdown(f"**{decision['rationale']}**")
         
         if decision["spike_boost_applied"]:
-            st.warning(f"⚡ Urgency was boosted by a **{tvi_severity}** TVI spike (TVI = {tvi_value:.1f}%)")
+            st.warning(f"Urgency was boosted by a **{tvi_severity}** TVI spike (TVI = {tvi_value:.1f}%)")
             
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
     # ─── Sales Trend Graph ───
-    st.subheader("📈 Historical Sales vs Prediction")
+    st.subheader("Historical Sales vs Prediction")
     
     fig = go.Figure()
     

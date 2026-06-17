@@ -23,7 +23,7 @@ def render():
     st.markdown("""
     <div class="main-header">
         <h1><span class="material-symbols-outlined" style="margin-right: 12px; color: #7C3AED;">online_prediction</span> Model Predictions</h1>
-        <p>XGBoost vs Random Forest vs ARIMA — performance comparison and analysis</p>
+        <p>XGBoost vs Random Forest vs Naive Baseline — performance comparison and analysis</p>
     </div>
     """, unsafe_allow_html=True)
     

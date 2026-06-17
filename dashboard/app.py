@@ -156,12 +156,18 @@ st.markdown("""
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     
-    /* Sidebar Brand */
+    /* Sidebar Brand Absolute Positioning */
+    [data-testid="stSidebarNav"] {
+        padding-top: 80px !important;
+    }
+    
     .sidebar-brand {
+        position: absolute;
+        top: 20px;
+        left: 20px;
         display: flex;
         align-items: center;
-        padding: 16px 0 24px 0;
-        margin-bottom: 8px;
+        z-index: 999999;
     }
     
     .sidebar-brand .material-symbols-outlined {
@@ -171,11 +177,56 @@ st.markdown("""
     }
     
     .sidebar-brand h2 {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #111827;
-        margin: 0;
+        font-size: 1.25rem !important;
+        font-weight: 700 !important;
+        color: #111827 !important;
+        margin: 0 !important;
         letter-spacing: -0.02em;
+    }
+
+    /* Global Text Size Increase */
+    p, span, div, li, .stMarkdown, .stMetric, label {
+        font-size: 1.15rem !important;
+    }
+    
+    /* Top Bar Styling */
+    .top-bar-container {
+        background: linear-gradient(135deg, #7C3AED, #6D28D9);
+        padding: 16px 24px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+    }
+    .top-bar-container h1 {
+        color: white !important;
+        margin: 0 !important;
+        font-size: 1.8rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.02em;
+    }
+    .top-bar-container .material-symbols-outlined {
+        color: white !important;
+        font-size: 2.2rem !important;
+        margin-right: 12px;
+    }
+    
+    /* Boundaries for graphs and inputs */
+    [data-testid="stForm"], [data-testid="stSelectbox"], [data-testid="stNumberInput"], [data-testid="stSlider"], [data-testid="stCheckbox"] {
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
+        background-color: #F8FAFC !important;
+        margin-bottom: 12px;
+    }
+    
+    [data-testid="stPlotlyChart"] {
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
     }
     
     /* Hide Streamlit branding */
@@ -191,6 +242,12 @@ st.markdown("""
         border: none;
     }
 </style>
+""", unsafe_allow_html=True)
+st.markdown("""
+<div class="top-bar-container">
+    <span class="material-symbols-outlined">analytics</span>
+    <h1>TrendSense</h1>
+</div>
 """, unsafe_allow_html=True)
 
 # ──────────────────────────────────
