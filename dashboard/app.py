@@ -22,7 +22,7 @@ import config
 # ──────────────────────────────────
 st.set_page_config(
     page_title="TrendSense | AI-Powered Demand Forecasting",
-    page_icon="📈",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -191,8 +191,7 @@ st.markdown("""
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
-    [data-testid="stHeader"] {display: none;}
+    .stDeployButton {display: none;}
     
     /* Custom separator */
     .custom-divider {
@@ -210,7 +209,7 @@ st.markdown("""
 with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
-        <h2>📈 TrendSense</h2>
+        <h2> TrendSense</h2>
         <p style="color: #94A3B8; font-size: 0.8rem;">AI-Powered Demand Forecasting</p>
     </div>
     """, unsafe_allow_html=True)

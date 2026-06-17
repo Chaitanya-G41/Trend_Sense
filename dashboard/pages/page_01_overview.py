@@ -22,7 +22,7 @@ def render():
     # Header
     st.markdown("""
     <div class="main-header">
-        <h1>📈 TrendSense Dashboard</h1>
+        <h1> TrendSense Dashboard</h1>
         <p>AI-Powered Social Media Trend Prediction for Business Decision Making</p>
     </div>
     """, unsafe_allow_html=True)
@@ -31,7 +31,7 @@ def render():
     walmart_df, trends_df = load_data()
     
     if walmart_df is None:
-        st.warning("⚠️ No data available. Please run the pipeline first: `python run_pipeline.py`")
+        st.warning(" No data available. Please run the pipeline first: `python run_pipeline.py`")
         st.code("python run_pipeline.py --synthetic-trends", language="bash")
         return
     
@@ -88,7 +88,7 @@ def render():
     col_left, col_right = st.columns([2, 1])
     
     with col_left:
-        st.subheader("📉 Weekly Sales Trend")
+        st.subheader(" Weekly Sales Trend")
         
         # Aggregate by date
         if "Store" in walmart_df.columns:
@@ -135,7 +135,7 @@ def render():
         st.plotly_chart(fig, use_container_width=True)
     
     with col_right:
-        st.subheader("📊 Sales Distribution")
+        st.subheader(" Sales Distribution")
         
         fig2 = go.Figure()
         fig2.add_trace(go.Histogram(
@@ -192,7 +192,7 @@ def render():
     # ─── Recent TVI Alerts ───
     if trends_df is not None and len(trends_df) > 0:
         st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        st.subheader("⚡ Recent Trend Alerts")
+        st.subheader(" Recent Trend Alerts")
         
         from src.tvi import compute_tvi_features
         

@@ -32,14 +32,14 @@ def render():
     featured_df = load_featured_data()
     
     if not models_info or featured_df is None:
-        st.warning("⚠️ No trained models or processed data found. Please run the pipeline first:")
+        st.warning("No trained models or processed data found. Please run the pipeline first:")
         st.code("python run_pipeline.py", language="bash")
         return
     
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     
     # ─── Model Comparison ───
-    st.subheader("📊 Model Performance Comparison")
+    st.subheader(" Model Performance Comparison")
     
     # Build comparison from saved models or defaults
     comparison_data = get_comparison_data(models_info)
@@ -54,7 +54,7 @@ def render():
                     m.get("MAPE (%)", 100) for m in comparison_data.values()
                 )
                 border_color = "#10B981" if is_best else "rgba(99, 102, 241, 0.3)"
-                badge = "⭐ BEST" if is_best else ""
+                badge = " BEST" if is_best else ""
                 
                 st.markdown(f"""
                 <div style="background: #FFFFFF;
@@ -117,7 +117,7 @@ def render():
     # ─── Δ-MAPE Improvement ───
     if comparison_data and len(comparison_data) >= 2:
         st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        st.subheader("📈 Δ-MAPE: Improvement Over Baseline")
+        st.subheader(" Δ-MAPE: Improvement Over Baseline")
         
         model_names = list(comparison_data.keys())
         baseline_mape = comparison_data[model_names[0]].get("MAPE (%)", 0)
@@ -139,7 +139,7 @@ def render():
     
     # ─── Prediction vs Actual ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader("📉 Prediction vs Actual (Test Set)")
+    st.subheader(" Prediction vs Actual (Test Set)")
     
     # Generate predictions using loaded model or simulate
     predictions, actuals = generate_predictions(featured_df, models_info)
@@ -227,7 +227,7 @@ def render():
         # Highlight TVI features
         tvi_features = top[top["feature"].str.contains("tvi|spike|trend", case=False, na=False)]
         if len(tvi_features) > 0:
-            st.success(f"🎯 **TVI features in top {top_n}**: {len(tvi_features)} features "
+            st.success(f" **TVI features in top {top_n}**: {len(tvi_features)} features "
                       f"({len(tvi_features)/top_n*100:.0f}% of top features are trend-derived)")
 
 
