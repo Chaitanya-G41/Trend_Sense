@@ -32,9 +32,10 @@ def compute_tvi(trend_series: pd.Series) -> pd.Series:
     pd.Series
         TVI values (percentage change)
     """
-    # Avoid division by zero by replacing 0 with small epsilon
-    safe_series = trend_series.replace(0, np.finfo(float).eps)
+    # Replace 0 with NaN, forward-fill, compute pct_change, and cap at +/- 500%
+    safe_series = trend_series.replace(0, np.nan).ffill()
     tvi = safe_series.pct_change() * 100
+    tvi = tvi.clip(-500.0, 500.0)
     return tvi
 
 

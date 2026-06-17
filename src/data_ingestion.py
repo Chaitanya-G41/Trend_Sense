@@ -65,7 +65,7 @@ def download_walmart_data(dest_dir: str = None) -> pd.DataFrame:
     try:
         df["Date"] = pd.to_datetime(df["Date"], format="%d-%m-%Y")
     except (ValueError, TypeError):
-        df["Date"] = pd.to_datetime(df["Date"], dayfirst=True, infer_datetime_format=True)
+        df["Date"] = pd.to_datetime(df["Date"], dayfirst=True)
     
     df = df.sort_values(["Store", "Date"]).reset_index(drop=True)
     

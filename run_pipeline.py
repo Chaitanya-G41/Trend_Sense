@@ -39,8 +39,6 @@ from src.utils import (
     plot_feature_importance, save_dataframe,
 )
 
-warnings.filterwarnings("ignore")
-
 
 def run_pipeline(skip_download=False, use_synthetic_trends=False, save_plots=True):
     """
@@ -203,21 +201,33 @@ def run_pipeline(skip_download=False, use_synthetic_trends=False, save_plots=Tru
         predictions = xgb_result["predictions"]
         actuals = training_results["y_test"].values
         
-        # Create TVI statuses for test period
+        # Create TVI statuses for test period from actual X_test data
         n_test = len(predictions)
         tvi_statuses = []
+        X_test = training_results["X_test"]
+        
+        # Find the TVI column names
+        tvi_col = next((c for c in X_test.columns if c.startswith("tvi_") and not c.startswith("tvi_accel") and not c.startswith("tvi_smooth")), None)
+        severity_col = next((c for c in X_test.columns if c.startswith("spike_severity_") and c.endswith("_encoded")), None)
+        
+        severity_map_reverse = {0: "NONE", 1: "MILD", 2: "MODERATE", 3: "SEVERE"}
+        
         for i in range(n_test):
-            # Check if any keyword has a spike in recent weeks
-            is_spike = np.random.random() < 0.15  # ~15% chance of spike
-            severity = np.random.choice(["MILD", "MODERATE", "SEVERE"],
-                                        p=[0.5, 0.35, 0.15]) if is_spike else "NONE"
+            tvi_val = X_test[tvi_col].iloc[i] if tvi_col else 0.0
+            sev_encoded = int(X_test[severity_col].iloc[i]) if severity_col else 0
+            severity = severity_map_reverse.get(sev_encoded, "NONE")
+            is_spike = severity != "NONE"
+            
             tvi_statuses.append({
                 "is_spike": is_spike,
                 "severity": severity,
-                "tvi_value": np.random.normal(0, 30) if is_spike else 0,
+                "tvi_value": tvi_val,
             })
         
-        # Use actual values as "current stock" for demo
+        # Use previous week's actual sales as "current stock" for realistic simulation
+        y_train = training_results["y_train"].values
+        current_stocks = np.concatenate(([y_train[-1]], actuals[:-1]))
+        
         decisions_df = generate_batch_decisions(
             predictions=predictions,
             current_stocks=actuals,

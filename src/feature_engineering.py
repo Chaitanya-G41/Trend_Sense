@@ -68,6 +68,7 @@ def create_holiday_features(df: pd.DataFrame, date_col: str = "Date") -> pd.Data
     pd.DataFrame
         DataFrame with added holiday features
     """
+    import holidays
     df = df.copy()
     dt = pd.to_datetime(df[date_col])
     
@@ -75,8 +76,8 @@ def create_holiday_features(df: pd.DataFrame, date_col: str = "Date") -> pd.Data
     df["is_festive_season"] = dt.dt.month.isin([10, 11]).astype(int)
     
     # Diwali week proximity (approximate: last week of Oct / first week of Nov)
-    df["is_diwali_week"] = ((dt.dt.month == 10) & (dt.dt.day >= 25) | 
-                            (dt.dt.month == 11) & (dt.dt.day <= 7)).astype(int)
+    df["is_diwali_week"] = (((dt.dt.month == 10) & (dt.dt.day >= 25)) | 
+                            ((dt.dt.month == 11) & (dt.dt.day <= 7))).astype(int)
     
     # Big Billion Day / Great Indian Festival (early October)
     df["is_ecommerce_sale"] = ((dt.dt.month == 10) & (dt.dt.day <= 15)).astype(int)
@@ -87,28 +88,22 @@ def create_holiday_features(df: pd.DataFrame, date_col: str = "Date") -> pd.Data
     # End of season sale (June-July)
     df["is_eos_sale"] = dt.dt.month.isin([6, 7]).astype(int)
     
-    # Days to nearest holiday (approximate)
-    holiday_dates = []
-    for year in dt.dt.year.unique():
-        for name, info in config.INDIAN_HOLIDAYS.items():
-            try:
-                hdate = pd.Timestamp(year=year, month=info["month"], day=info["day"])
-                holiday_dates.append(hdate)
-            except ValueError:
-                pass
-    
-    if holiday_dates:
-        holiday_dates = sorted(holiday_dates)
+    def days_to_nearest(date):
+        year = date.year
+        # Get holidays for this year, previous year, and next year
+        holiday_dates = []
+        for y in [year - 1, year, year + 1]:
+            holiday_dates.extend(list(holidays.IN(years=y).keys()))
+            
+        if not holiday_dates:
+            return 999
+            
+        holiday_dates = [pd.Timestamp(h) for h in holiday_dates]
+        diffs = [abs((h - date).days) for h in holiday_dates]
+        return min(diffs) if diffs else 999
         
-        def days_to_nearest(date):
-            diffs = [abs((h - date).days) for h in holiday_dates]
-            return min(diffs) if diffs else 999
-        
-        df["days_to_nearest_holiday"] = dt.apply(days_to_nearest)
-        df["is_near_holiday"] = (df["days_to_nearest_holiday"] <= 7).astype(int)
-    else:
-        df["days_to_nearest_holiday"] = 999
-        df["is_near_holiday"] = 0
+    df["days_to_nearest_holiday"] = dt.apply(days_to_nearest)
+    df["is_near_holiday"] = (df["days_to_nearest_holiday"] <= 7).astype(int)
     
     return df
 
@@ -359,7 +354,11 @@ def merge_all_features(
     
     # 6. Drop rows with NaN from lagging (first few weeks)
     initial_rows = len(df)
-    df = df.dropna(subset=[f"{target_col}_lag_1w"]).reset_index(drop=True)
+    
+    # We should drop all rows that have NaN in any feature column
+    feature_cols = [col for col in df.columns if col not in [target_col, "Date", "date", "Store", "_merge_week"]]
+    df = df.dropna(subset=feature_cols).reset_index(drop=True)
+    
     dropped = initial_rows - len(df)
     print(f"   ℹ️ Dropped {dropped} rows with NaN from lagging")
     

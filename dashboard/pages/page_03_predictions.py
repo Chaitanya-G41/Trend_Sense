@@ -31,9 +31,9 @@ def render():
     models_info = load_models()
     featured_df = load_featured_data()
     
-    if featured_df is None:
-        st.warning("⚠️ No processed data found. Run the pipeline first:")
-        st.code("python run_pipeline.py --synthetic-trends", language="bash")
+    if not models_info or featured_df is None:
+        st.warning("⚠️ No trained models or processed data found. Please run the pipeline first:")
+        st.code("python run_pipeline.py", language="bash")
         return
     
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
@@ -270,17 +270,6 @@ def get_comparison_data(models_info):
                 if name != "Best Model":
                     comparison[name] = data["metrics"]
     
-    # Add ARIMA placeholder if not present
-    if not comparison:
-        comparison = {
-            "ARIMA (Baseline)": {"MAPE (%)": 18.5, "RMSE": 5200, "MAE": 4100, "R²": 0.62},
-            "Random Forest": {"MAPE (%)": 12.3, "RMSE": 3400, "MAE": 2800, "R²": 0.81},
-            "XGBoost + TVI": {"MAPE (%)": 9.8, "RMSE": 2700, "MAE": 2100, "R²": 0.89},
-        }
-    elif "ARIMA (Baseline)" not in comparison:
-        comparison = {"ARIMA (Baseline)": {"MAPE (%)": 18.5, "RMSE": 5200, "MAE": 4100, "R²": 0.62},
-                      **comparison}
-    
     return comparison
 
 
@@ -311,14 +300,7 @@ def generate_predictions(featured_df, models_info):
         except Exception:
             pass
     
-    # Fallback: simulate predictions
-    test_weeks = min(config.TEST_SIZE_WEEKS, len(featured_df) // 4)
-    actuals = featured_df[target_col].tail(test_weeks).values
-    np.random.seed(42)
-    noise = np.random.normal(0, np.std(actuals) * 0.08, test_weeks)
-    predictions = actuals + noise
-    
-    return predictions, actuals
+    return None, None
 
 
 def get_feature_importance(models_info, featured_df):
@@ -335,21 +317,6 @@ def get_feature_importance(models_info, featured_df):
                     "feature": feature_cols,
                     "importance": importances,
                 }).sort_values("importance", ascending=False)
-        except Exception:
-            pass
-    
-    # Fallback: synthetic importance
-    if featured_df is not None:
-        from src.feature_engineering import get_feature_columns
-        try:
-            feature_cols = get_feature_columns(featured_df, "Weekly_Sales")
-            np.random.seed(42)
-            importances = np.random.exponential(0.05, len(feature_cols))
-            importances = importances / importances.sum()
-            return pd.DataFrame({
-                "feature": feature_cols,
-                "importance": importances,
-            }).sort_values("importance", ascending=False)
         except Exception:
             pass
     

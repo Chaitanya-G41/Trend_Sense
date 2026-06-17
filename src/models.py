@@ -243,7 +243,6 @@ def train_xgboost(
     model = XGBRegressor(**params, verbosity=0)
     model.fit(
         X_train, y_train,
-        eval_set=[(X_test, y_test)],
         verbose=False,
     )
 
@@ -435,9 +434,7 @@ def temporal_train_test_split(
     X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
     y_train, y_test = y.iloc[:split_idx], y.iloc[split_idx:]
 
-    # Fill any remaining NaN with 0
-    X_train = X_train.fillna(0)
-    X_test = X_test.fillna(0)
+    # Rows with NaNs should be dropped during feature engineering, not zero-filled here
 
     print(f"📋 Train/Test split: {len(X_train)} train / {len(X_test)} test rows")
     print(f"   Features: {len(feature_cols)} columns")
@@ -544,8 +541,20 @@ def run_full_training(
     results = {}
 
     # 2. ARIMA Baseline
-    train_series = df.sort_values(date_col)[target_col].iloc[: len(X_train)]
-    test_series = df.sort_values(date_col)[target_col].iloc[len(X_train) :]
+    # Convert index to DatetimeIndex for ARIMA
+    temp_df = df.sort_values(date_col).set_index(date_col)
+    temp_df.index = pd.to_datetime(temp_df.index)
+    
+    train_series = temp_df[target_col].iloc[: len(X_train)]
+    test_series = temp_df[target_col].iloc[len(X_train) :]
+    
+    # Try to set frequency if possible
+    try:
+        train_series = train_series.asfreq(pd.infer_freq(train_series.index) or 'W-SUN')
+        test_series = test_series.asfreq(pd.infer_freq(test_series.index) or 'W-SUN')
+    except:
+        pass
+        
     if len(test_series) > 0:
         arima_result = train_arima_baseline(train_series, test_series)
         results["ARIMA (Baseline)"] = arima_result
