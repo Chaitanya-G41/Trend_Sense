@@ -160,9 +160,7 @@ def render():
     <div class="{card_class}" style="text-align: center;">
         <div style="font-size: 3.5rem; margin-bottom: 8px;">{icon}</div>
         <div style="font-size: 2.2rem; font-weight: 800; letter-spacing: 2px;">{action}</div>
-        <div style="font-size: 1.3rem; margin-top: 8px; opacity: 0.9;">
-            Confidence: <span style="font-weight: 800; font-size: 1.5rem;">{confidence}</span>
-        </div>
+        <div style="height: 8px;"></div>
         <hr style="border-color: rgba(255,255,255,0.2); margin: 16px 40px;">
         <div style="display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;">
             <div>
