@@ -245,7 +245,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 st.markdown("""
 <div class="top-bar-container">
-    <span class="material-symbols-outlined">analytics</span>
     <h1>TrendSense</h1>
 </div>
 """, unsafe_allow_html=True)
@@ -256,7 +255,6 @@ st.markdown("""
 with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
-        <span class="material-symbols-outlined">analytics</span>
         <h2>TrendSense</h2>
     </div>
     """, unsafe_allow_html=True)

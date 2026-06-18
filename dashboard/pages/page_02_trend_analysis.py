@@ -22,7 +22,7 @@ def render():
     
     st.markdown("""
     <div class="main-header">
-        <h1><span class="material-symbols-outlined" style="margin-right: 12px; color: #7C3AED;">trending_up</span> Trend Analysis</h1>
+        <h1>Trend Analysis</h1>
         <p>Google Trends interest, Trend Velocity Index (TVI), and spike detection</p>
     </div>
     """, unsafe_allow_html=True)
@@ -179,7 +179,7 @@ def render():
     
     # ─── Spike Timeline ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader(":material/history: Spike Timeline")
+    st.subheader("Spike Timeline")
     
     spikes = tvi_feat[tvi_feat["is_spike"]].copy()
     
@@ -206,7 +206,7 @@ def render():
     # ─── Multi-keyword Comparison ───
     if len(keywords) > 1:
         st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        st.subheader(":material/compare_arrows: Multi-Keyword Comparison")
+        st.subheader("Multi-Keyword Comparison")
         
         compare_keywords = st.multiselect(
             "Select keywords to compare",

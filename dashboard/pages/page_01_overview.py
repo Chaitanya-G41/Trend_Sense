@@ -22,7 +22,7 @@ def render():
     # Header
     st.markdown("""
     <div class="main-header">
-        <h1><span class="material-symbols-outlined" style="margin-right: 12px; color: #7C3AED;">dashboard</span> Overview</h1>
+        <h1>Overview</h1>
         <p>AI-Powered Social Media Trend Prediction for Business Decision Making</p>
     </div>
     """, unsafe_allow_html=True)
@@ -31,7 +31,7 @@ def render():
     walmart_df, trends_df = load_data()
     
     if walmart_df is None:
-        st.warning(":material/warning: No data available. Please run the pipeline first: `python run_pipeline.py`")
+        st.warning("No data available. Please run the pipeline first: `python run_pipeline.py`")
         st.code("python run_pipeline.py --synthetic-trends", language="bash")
         return
     
@@ -47,7 +47,6 @@ def render():
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-header">
-                <span class="material-symbols-outlined">storefront</span>
                 Total Stores
             </div>
             <div class="kpi-value">{total_stores}</div>
@@ -59,7 +58,6 @@ def render():
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-header">
-                <span class="material-symbols-outlined">payments</span>
                 Avg Weekly Sales
             </div>
             <div class="kpi-value">${avg_sales:,.0f}</div>
@@ -71,7 +69,6 @@ def render():
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-header">
-                <span class="material-symbols-outlined">account_balance_wallet</span>
                 Total Revenue
             </div>
             <div class="kpi-value">${total_sales/1e6:,.1f}M</div>
@@ -84,7 +81,6 @@ def render():
         st.markdown(f"""
         <div class="kpi-card">
             <div class="kpi-header">
-                <span class="material-symbols-outlined">celebration</span>
                 Holiday Impact
             </div>
             <div class="kpi-value">{delta_sign}${holiday_impact:,.0f}</div>
@@ -98,7 +94,7 @@ def render():
     col_left, col_right = st.columns([2, 1], gap="large")
     
     with col_left:
-        st.subheader(":material/timeline: Weekly Sales Trend")
+        st.subheader("Weekly Sales Trend")
         
         # Aggregate by date
         if "Store" in walmart_df.columns:
@@ -146,7 +142,7 @@ def render():
         st.plotly_chart(fig, use_container_width=True)
     
     with col_right:
-        st.subheader(":material/bar_chart: Sales Distribution")
+        st.subheader("Sales Distribution")
         
         fig2 = go.Figure()
         fig2.add_trace(go.Histogram(
@@ -169,7 +165,7 @@ def render():
     
     # ─── Store Performance ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader(":material/store: Store Performance Comparison")
+    st.subheader("Store Performance Comparison")
     
     if "Store" in walmart_df.columns:
         store_perf = walmart_df.groupby("Store")["Weekly_Sales"].agg(["mean", "std", "min", "max"]).reset_index()
@@ -205,7 +201,7 @@ def render():
     # ─── Recent TVI Alerts ───
     if trends_df is not None and len(trends_df) > 0:
         st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        st.subheader(":material/notifications_active: Recent Trend Alerts")
+        st.subheader("Recent Trend Alerts")
         
         from src.tvi import compute_tvi_features
         
@@ -220,7 +216,7 @@ def render():
                 spike_count = len(tvi_feat[tvi_feat["is_spike"]])
                 latest_tvi = tvi_feat["tvi"].dropna().iloc[-1] if len(tvi_feat["tvi"].dropna()) > 0 else 0
                 
-                status_icon = ":material/check_circle:" if abs(latest_tvi) < 10 else (":material/warning:" if abs(latest_tvi) < 30 else ":material/error:")
+                status_icon = "[OK]" if abs(latest_tvi) < 10 else ("[WARN]" if abs(latest_tvi) < 30 else "[ALERT]")
                 
                 st.metric(
                     label=f"{status_icon} {keyword}",

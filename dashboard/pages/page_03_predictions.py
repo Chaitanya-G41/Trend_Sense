@@ -22,7 +22,7 @@ def render():
     
     st.markdown("""
     <div class="main-header">
-        <h1><span class="material-symbols-outlined" style="margin-right: 12px; color: #7C3AED;">online_prediction</span> Model Predictions</h1>
+        <h1>Model Predictions</h1>
         <p>XGBoost vs Random Forest vs Naive Baseline — performance comparison and analysis</p>
     </div>
     """, unsafe_allow_html=True)
@@ -143,7 +143,7 @@ def render():
     
     # ─── Prediction vs Actual ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader(":material/monitoring: Prediction vs Actual (Test Set)")
+    st.subheader("Prediction vs Actual (Test Set)")
     
     # Generate predictions using loaded model or simulate
     predictions, actuals = generate_predictions(featured_df, models_info)
@@ -198,7 +198,7 @@ def render():
     
     # ─── Feature Importance ───
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-    st.subheader(":material/tune: Feature Importance (XGBoost)")
+    st.subheader("Feature Importance (XGBoost)")
     
     importance_df = get_feature_importance(models_info, featured_df)
     
